@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Details Page</title>
+    <style>
+        /* Your CSS styles here */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Enter Details</h1>
+        <form id="details-form">
+            <!-- Name Input -->
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <!-- Phone Number Input -->
+            <label for="phoneNumber">Phone Number:</label>
+            <input type="text" id="phoneNumber" name="phoneNumber" required>
+
+            <!-- Address Input -->
+            <label for="address">Address:</label>
+            <input type="text" id="address" name="address" required>
+
+            <!-- Product Number Input -->
+            <label for="productNumber">Product Number:</label>
+            <input type="text" id="productNumber" name="productNumber" required>
+
+            
+            <!-- Submit Button -->
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Get the form element by its ID
+        const form = document.getElementById('details-form');
+
+        // Add a listener for the form's submit event
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting normally
+
+            // Get values from input fields
+            const name = document.getElementById('name').value;
+            const phoneNumber = document.getElementById('phoneNumber').value;
+            const address = document.getElementById('address').value;
+            const productNumber = document.getElementById('productNumber').value;
+            //const productName = document.getElementById('productNamer').value;
+
+            // Replace with your Twilio Account SID and Auth Token
+            const accountSid = 'ACf659f0f212b0ce227ccccf1ac7c7edb1';
+            const authToken = '34fdd06b5f8cf04e748b1502a42ec747';
+
+            // Replace with your Twilio phone number
+            const twilioPhoneNumber = '+18484208613';
+
+            // Replace with the recipient's phone number
+            const recipientPhoneNumber = '+919951921137';
+
+            // Send SMS using Twilio via AJAX
+            $.ajax({
+                type: 'POST',
+                url: `https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages.json`,
+                data: {
+                    To: recipientPhoneNumber,
+                    From: twilioPhoneNumber,
+                    Body: `Name: ${name}\nPhone Number: ${phoneNumber}\nAddress: ${address}\nProduct Number: ${productNumber}`,
+                },
+                headers: {
+                    'Authorization': 'Basic ' + btoa(`${accountSid}:${authToken}`)
+                },
+                success: function(response) {
+                    console.log('Message sent successfully:', response);
+                    alert('Message sent successfully');
+                },
+                error: function(error) {
+                    console.error('Error sending message:', error);
+                    alert('Error sending message');
+                }
+            });
+
+            // Clear the form
+            form.reset();
+        });
+    </script>
+</body>
+</html>
